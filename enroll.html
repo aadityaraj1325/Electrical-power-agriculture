@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Page</title>
+  <style>
+    :root {
+      --primary: #f4a261;
+      --accent: #e76f51;
+      --bg: #fffaf3;
+      --card-bg: #fff;
+      --text: #222;
+      --success: #2a9d8f;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: var(--card-bg);
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      max-width: 450px;
+      width: 90%;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-weight: 500;
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    .qr {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .qr img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      width: 100%;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: var(--accent);
+    }
+
+    .note {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form action="enroll.php" method="POST">
+      <h2>Payment Submission</h2>
+
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" required>
+
+      <label for="name">Name:</label>
+      <input type="text" name="name" id="name" required>
+
+      <div class="qr">
+        <p>Scan & Pay</p>
+        <img src="/imagesForfram/download.png" alt="QR Code">
+      </div>
+
+      <button type="submit">Submit Payment Screenshot</button>
+
+      <div class="note">After submission, kindly provide UPI ID in Contact Us.</div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Solar vs Grid Comparison</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      background: #fff8f1;
+      font-family: "Segoe UI", sans-serif;
+      padding: 2rem;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      color: #f4a261;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-description {
+      text-align: center;
+      color: #444;
+      margin-bottom: 30px;
+    }
+
+    .toggle-wrapper {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+      background: #f4a261;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      background: #e76f51;
+    }
+
+    .toggle-btn.active {
+      background-color: #e76f51;
+    }
+
+    .comparison-box {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .comparison-box ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .comparison-box li {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+
+    .back-home {
+      display: inline-block;
+      margin-top: 2rem;
+      background: #f4a261;
+      color: white;
+      padding: 12px 25px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .back-home:hover {
+      background: #e76f51;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Solar vs Grid Power</h2>
+    <p class="section-description">
+      Compare the two power sources and make an informed choice for your farm.
+    </p>
+
+    <div class="toggle-wrapper">
+      <button id="solarBtn" class="toggle-btn active" onclick="showComparison('solar')">☀️ Solar Power</button>
+      <button id="gridBtn" class="toggle-btn" onclick="showComparison('grid')">⚡ Grid Power</button>
+    </div>
+
+    <div id="comparisonBox" class="comparison-box">
+      <!-- Dynamic content -->
+    </div>
+    <h3 style="margin-top: 3rem;">🔧 Customize the Comparison</h3>
+<p>Enter your own ratings (1 to 10) and generate a personalized chart!</p>
+
+<form id="ratingForm" style="text-align: left; max-width: 700px; margin: 1.5rem auto;">
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th>Factor</th>
+        <th>Solar</th>
+        <th>Grid</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Upfront Cost</td>
+        <td><input type="number" name="solar[]" min="1" max="10" value="8" required></td>
+        <td><input type="number" name="grid[]" min="1" max="10" value="3" required></td>
+      </tr>
+      <tr>
+        <td>Monthly Cost</td>
+        <td><input type="number" name="solar[]" min="1" max="10" value="3" required></td>
+        <td><input type="number" name="grid[]" min="1" max="10" value="7" required></td>
+      </tr>
+      <tr>
+        <td>Maintenance</td>
+        <td><input type="number" name="solar[]" min="1" max="10" value="2" required></td>
+        <td><input type="number" name="grid[]" min="1" max="10" value="5" required></td>
+      </tr>
+      <tr>
+        <td>Uptime</td>
+        <td><input type="number" name="solar[]" min="1" max="10" value="9" required></td>
+        <td><input type="number" name="grid[]" min="1" max="10" value="6" required></td>
+      </tr>
+      <tr>
+        <td>Eco-Friendly</td>
+        <td><input type="number" name="solar[]" min="1" max="10" value="10" required></td>
+        <td><input type="number" name="grid[]" min="1" max="10" value="5" required></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button type="submit" style="margin-top: 1rem;" class="toggle-btn">Generate Chart</button>
+</form>
+
+    <canvas id="powerChart" width="400" height="250" style="margin-top: 3rem;"></canvas>
+    <div style="text-align: center; margin-top: 1.5rem;">
+        <button onclick="downloadChartAsPDF()" class="toggle-btn">📄 Save Chart as PDF</button>
+      </div>
+      
+
+    <div style="text-align: center;">
+      <a href="index.html" class="back-home">⬅️ Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    function showComparison(type) {
+      const solarBtn = document.getElementById("solarBtn");
+      const gridBtn = document.getElementById("gridBtn");
+      const box = document.getElementById("comparisonBox");
+
+      if (type === 'solar') {
+        solarBtn.classList.add("active");
+        gridBtn.classList.remove("active");
+        box.innerHTML = `
+          <h3>☀️ Solar Power Advantages</h3>
+          <ul>
+            <li><strong>Cost:</strong> High initial setup, low long-term cost</li>
+            <li><strong>Maintenance:</strong> Minimal and easy</li>
+            <li><strong>Availability:</strong> Independent of local power cuts</li>
+            <li><strong>Eco-Friendly:</strong> 100% renewable, no emissions</li>
+            <li><strong>Best For:</strong> Remote farms with ample sunlight</li>
+          </ul>
+        `;
+      } else {
+        gridBtn.classList.add("active");
+        solarBtn.classList.remove("active");
+        box.innerHTML = `
+          <h3>⚡ Grid Power Overview</h3>
+          <ul>
+            <li><strong>Cost:</strong> Pay per unit every month</li>
+            <li><strong>Maintenance:</strong> Handled by electricity board</li>
+            <li><strong>Availability:</strong> May face outages, especially in rural areas</li>
+            <li><strong>Eco-Friendly:</strong> Dependent on energy source</li>
+            <li><strong>Best For:</strong> Areas with consistent and cheap supply</li>
+          </ul>
+        `;
+      }
+    }
+
+    window.onload = () => showComparison('solar');
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  let chartInstance;
+
+  document.getElementById("ratingForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const solarInputs = document.getElementsByName("solar[]");
+    const gridInputs = document.getElementsByName("grid[]");
+
+    const solarValues = Array.from(solarInputs).map(input => parseInt(input.value));
+    const gridValues = Array.from(gridInputs).map(input => parseInt(input.value));
+
+    const ctx = document.getElementById("powerChart").getContext("2d");
+
+    if (chartInstance) chartInstance.destroy(); // Clear previous chart
+
+    chartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Upfront Cost', 'Monthly Cost', 'Maintenance', 'Uptime', 'Eco-Friendly'],
+        datasets: [
+          {
+            label: 'Solar Power',
+            data: solarValues,
+            backgroundColor: '#f4a261'
+          },
+          {
+            label: 'Grid Power',
+            data: gridValues,
+            backgroundColor: '#264653'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 10,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top'
+          },
+          title: {
+            display: true,
+            text: 'Custom Comparison: Solar vs Grid Power'
+          }
+        }
+      }
+    });
+  });
+
+  // Auto-load default chart
+  window.onload = () => document.getElementById("ratingForm").dispatchEvent(new Event("submit"));
+</script>
+
+<!-- Chart.js already included -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+    async function downloadChartAsPDF() {
+      const chartCanvas = document.getElementById("powerChart");
+  
+      const canvasImage = await html2canvas(chartCanvas, {
+        scale: 2,
+        useCORS: true
+      });
+  
+      const imageData = canvasImage.toDataURL("image/png");
+  
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF();
+  
+      pdf.setFontSize(16);
+      pdf.text("Custom Solar vs Grid Comparison", 20, 20);
+      pdf.addImage(imageData, "PNG", 15, 30, 180, 100); // adjust size/position as needed
+      pdf.save("Solar_vs_Grid_Chart.pdf");
+    }
+  </script>
+  
+
+  
+</body>
+</html>
